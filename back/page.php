@@ -47,12 +47,19 @@ if(isset($_SESSION['id_compte']))
                 $color_champ['contenu_page']="color_champ"; 
                 }
             else{
+                //on recupere le rang a attribuer a la nouvelle page
+                $requete0="SELECT COUNT(*) AS rang FROM pages";
+                $resultat0=mysqli_query($connexion,$requete0);
+                $ligne0=mysqli_fetch_object($resultat0);
+                $new_rang=$ligne0->rang+1;
+
                 //on enregistre le compte dans la table comptes
                 $requete="INSERT INTO pages SET id_compte='".$_SESSION['id_compte']."',
                                                 id_rubrique='".$_POST['id_rubrique']."',
                                                 titre_page='".security($_POST['titre_page'])."',
                                                 contenu_page='".security($_POST['contenu_page'])."',
                                                 visible='".$_POST['visible']."',
+                                                rang='". $new_rang ."',
                                                 date_page=NOW()";
                                                 echo $requete;
                 $resultat=mysqli_query($connexion,$requete);
@@ -170,7 +177,16 @@ if(isset($_SESSION['id_compte']))
                     }    
                 $requete2="DELETE FROM pages WHERE id_page='" . $_GET['id_page'] . "'";
                 $resultat2=mysqli_query($connexion,$requete2);
-                $confirmation="<p class=\"ok\">La page a bien été supprimée</p>";                        
+                $confirmation="<p class=\"ok\">La page a bien été supprimée</p>";
+
+                $requete3="SELECT * FROM pages ORDER BY rang";
+                $resultat3=mysqli_query($connexion,$requete3);
+                $i=1;
+                while ($ligne3=mysqli_fetch_object($resultat3)){
+                    $requete4="UPDATE pages SET rang='". $i ."'WHERE id_page='".$ligne3->id_page."'";
+                    $resultat4=mysqli_query($connexion,$requete4);
+                    $i++;
+                }
                 }
 
             break;
@@ -340,9 +356,73 @@ if(isset($_SESSION['id_compte']))
                     unset($_POST[$cle]);    
                     }
                 }
+           // Action à effectuer lorsque l'URL contient "trier_page"
+case "trier_page";
+
+    // Vérifie si un identifiant de page a été fourni dans l'URL
+    if (isset($_GET['id_page'])){
+
+        // Switch pour les deux possibilités de tri : "up" ou "down"
+        switch ($_GET['sens']) {
+
+            // Si le tri est "up"
+            case "up":
+
+                // Vérifie si un rang a été fourni dans l'URL et qu'il est supérieur à 1
+                if (isset($_GET['rang']) && $_GET['rang'] > 1) {
+
+                    // On change le rang de la ligne qui a été déplacée vers le haut
+                    $rang = $_GET['rang'] - 1;
+                    $requete = "UPDATE pages SET rang='" . $_GET['rang'] . "' WHERE rang='" . $rang . "'";
+                    $resultat = mysqli_query($connexion, $requete);
+
+                    // On change le rang de la rubrique (id_rubrique) concernée
+                    $requete2 = "UPDATE pages SET rang='" . $rang . "' WHERE id_rubrique='" . $_GET['id_page'] . "'";
+                    $resultat2 = mysqli_query($connexion, $requete2);
+
+                }
+
+                break;
+
+            // Si le tri est "down"
+            case "down":
+
+                // On calcule le nombre total de lignes de pages dans la table
+                $requete = "SELECT count(*) AS nb_page FROM pages";
+                $resultat = mysqli_query($connexion, $requete);
+                $ligne = mysqli_fetch_object($resultat);
+
+                // Vérifie si un rang a été fourni dans l'URL et qu'il est inférieur au nombre total de lignes de pages
+                if (isset($_GET['rang']) && $_GET['rang'] < $ligne->nb_page) {
+
+                    // On change le rang de la ligne qui a été déplacée vers le bas
+                    $rang = $_GET['rang'] + 1;
+                    $requete = "UPDATE pages SET rang='" . $_GET['rang'] . "' WHERE rang='" . $rang . "'";
+                    $resultat = mysqli_query($connexion, $requete);
+
+                    // On change le rang de la rubrique (id_rubrique) concernée
+                    $requete2 = "UPDATE pages SET rang='" . $rang . "' WHERE id_page='" . $_GET['id_page'] . "'";
+                    $resultat2 = mysqli_query($connexion, $requete2);
+
+                }
+
+                break;
+        }
+    }
+
+
+
+
+
+
+
+
             break;
             }     
         }
+
+
+    //===================================
 
     //on créé la liste déroulante dynamique des rubriques
     $requete0="SELECT * FROM rubriques ORDER BY rang";
@@ -392,8 +472,17 @@ if(isset($_SESSION['id_compte']))
 
 
         $content.="<summary>";
+        //pour le trie
+            $content.="<div class=\"actions\">";
+            $content.="<a href=\"back.php?action=page&cas=trier_page&sens=up&id_page=".$ligne->id_page."&rang=".$ligne->rang."\"><span class=\"dashicons dashicons-arrow-up\"></span></a>";
+            $content.="<a href=\"back.php?action=page&cas=trier_page&sens=down&id_page=".$ligne->id_page."&rang=".$ligne->rang."\"><span class=\"dashicons dashicons-arrow-down\"></span></a>";
+            $content.="&nbsp;&nbsp;";
         $content.="<div>". $ligne->id_page ." - ". $ligne->titre_page ."</div>";
-        //si il y a un avatar
+            $content.="</div>";
+            //fin trie
+
+
+            //si il y a un avatar
         if(!empty($ligne->img_page))
             {
             $content.="<div><img src=\"". $ligne->img_page ."\" alt=\"\" /></div>";   

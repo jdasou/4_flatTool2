@@ -153,15 +153,71 @@ if(isset($_SESSION['id_compte']))
                     }
                 }
             break;
+
+
+            case "trier_rubrique";
+            if (isset($_GET['id_rubrique'])){
+
+                switch ($_GET['sens']){
+
+                    case "up":
+
+                        if (isset($_GET['rang']) && $_GET['rang']>1){
+                            //on cange le rang de la ligne sue l on as pris la place
+                            $rang=$_GET['rang']-1;
+                            $requete="UPDATE rubriques SET rang='".$_GET['rang']."' WHERE rang='".$rang."'";
+                            $resultat=mysqli_query($connexion,$requete);
+
+                            //change le rang de la rubrique(id_rubrique) concerner
+
+                            $requete2="UPDATE rubriques SET rang='".$rang."' WHERE id_rubrique='".$_GET['id_rubrique']."'";
+                            $resultat2=mysqli_query($connexion,$requete2);
+
+                        }
+
+
+
+                    break;
+
+                    case "down":
+
+                        //on calcule le nombre de ligne pour la buté
+                        $requete="SELECT count(*) AS nb_rubrique FROM rubriques";
+                        $resultat=mysqli_query($connexion,$requete);
+                        $ligne=mysqli_fetch_object($resultat);
+
+                        if (isset($_GET['rang']) && $_GET['rang']<$ligne->nb_rubrique){
+                            //on cange le rang de la ligne sue l on as pris la place
+                            $rang=$_GET['rang']+1;
+                            $requete="UPDATE rubriques SET rang='".$_GET['rang']."' WHERE rang='".$rang."'";
+                            $resultat=mysqli_query($connexion,$requete);
+
+                            //change le rang de la rubrique(id_rubrique) concerner
+
+                            $requete2="UPDATE rubriques SET rang='".$rang."' WHERE id_rubrique='".$_GET['id_rubrique']."'";
+                            $resultat2=mysqli_query($connexion,$requete2);
+
+                        }
+
+                    break;
+
+                }
+            }
+
+            break;
+
+
             }     
         }
+
+    //================================
 
     //tabelau d'affichage des rubriques
     //on selectionne tous les rubriques triés par date de création
     $requete="SELECT r.*, c.* FROM rubriques AS r 
                 INNER JOIN comptes AS c 
                 ON r.id_compte=c.id_compte 
-                ORDER BY r.id_rubrique ASC";
+                ORDER BY r.rang ASC";
 
     $resultat=mysqli_query($connexion,$requete);
     //tant que $resultat contient des lignes (uplets)
@@ -173,8 +229,10 @@ if(isset($_SESSION['id_compte']))
         $content.="<summary>"; 
         //pour le tri
         $content.="<div class=\"actions\">";
-        $content.="<a href=\"#\"><span class=\"dashicons dashicons-arrow-up\"></span></a>";
-        $content.="<a href=\"#\"><span class=\"dashicons dashicons-arrow-down\"></span></a>";
+        $content.="<a href=\"back.php?action=rubrique&cas=trier_rubrique&sens=up&id_rubrique=".$ligne->id_rubrique."&rang=".$ligne->rang."\"><span class=\"dashicons dashicons-arrow-up\"></span></a>";
+
+        $content.="<a href=\"back.php?action=rubrique&cas=trier_rubrique&sens=down&id_rubrique=".$ligne->id_rubrique."&rang=".$ligne->rang."\"><span class=\"dashicons dashicons-arrow-down\"></span></a>";
+
         $content.="&nbsp;&nbsp;";
         $content.=$ligne->id_rubrique ." - ". $ligne->nom_rubrique ." / " . $ligne->titre_rubrique;
         $content.="</div>"; 
