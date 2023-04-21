@@ -372,6 +372,7 @@ if(isset($_SESSION['id_compte']))
                 ORDER BY r.rang, p.rang ASC";
 
 
+
     $resultat=mysqli_query($connexion,$requete);
     //tant que $resultat contient des lignes (uplets)
     $content="";
