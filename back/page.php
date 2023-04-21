@@ -376,12 +376,23 @@ if(isset($_SESSION['id_compte']))
     $resultat=mysqli_query($connexion,$requete);
     //tant que $resultat contient des lignes (uplets)
     $content="";
+
+    $tab_rubrique=array();
+    $i=0;
+
     while($ligne=mysqli_fetch_object($resultat))
         {
-        $content.="<details class=\"tab_results\">"; 
+        $tab_rubrique[$i]=$ligne->id_rubrique;
+        if($i==0 || ($i>0 && $tab_rubrique[$i]!=$tab_rubrique[$i-1])){
+            $content.="<div>".$ligne->nom_rubrique."</div>";
+        }
 
-        $content.="<summary>"; 
-        $content.="<div>". $ligne->id_page ." - ". $ligne->titre_page ."</div>"; 
+
+        $content.="<details class=\"tab_results\">";
+
+
+        $content.="<summary>";
+        $content.="<div>". $ligne->id_page ." - ". $ligne->titre_page ."</div>";
         //si il y a un avatar
         if(!empty($ligne->img_page))
             {
@@ -400,7 +411,8 @@ if(isset($_SESSION['id_compte']))
 
         $content.="<div class=\"all\">Auteur : " . $ligne->prenom_compte . " " . $ligne->nom_compte . "<br>Créée le : ".$ligne->date_page ."<br><br>".$ligne->contenu_page ."</div>";
 
-        $content.="</details>"; 
+        $content.="</details>";
+        $i++;
         }
 
     }
