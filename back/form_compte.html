@@ -1,0 +1,30 @@
+<form  enctype="multipart/form-data" action="back.php?action=compte&cas=<?php if(isset($action_form)){echo $action_form;} ?>" method="post">
+    <label for="nom">Nom</label>
+    <input id="nom" class="<?php if(isset($color_champ['nom_compte'])){echo $color_champ['nom_compte'];} ?>" placeholder="Nom [obligatoire]" type="text" name="nom_compte" value="<?php if(isset($_POST['nom_compte'])){echo $_POST['nom_compte'];} ?>">
+        
+    <label for="prenom">Prénom</label>
+    <input id="prenom" placeholder="Prénom [facultatif]" type="text" name="prenom_compte" value="<?php if(isset($_POST['prenom_compte'])){echo $_POST['prenom_compte'];} ?>">
+
+    <label for="statut">Statut</label>  
+    <select id="statut" class="<?php if(isset($color_champ['statut_compte'])){echo $color_champ['statut_compte'];} ?>" name="statut_compte">
+        <option value="">Sélectionnez un statut [obligatoire]...</option>
+        <option value="super_admin" <?php if(isset($select['super_admin'])){echo $select['super_admin'];} ?> >Super admin</option>
+        <option value="admin" <?php if(isset($select['admin'])){echo $select['admin'];} ?>>Admin</option>
+        <option value="abonné" <?php if(isset($select['abonné'])){echo $select['abonné'];} ?>>Abonné</option>       
+    </select>
+    
+
+    <label for="email">Email</label>  
+    <input id="email" class="<?php if(isset($color_champ['email_compte'])){echo $color_champ['email_compte'];} ?>" placeholder="Email [obligatoire]" type="email" name="email_compte" value="<?php if(isset($_POST['email_compte'])){echo $_POST['email_compte'];} ?>">
+    
+    <label for="login">Login</label>
+    <input id="login" class="<?php if(isset($color_champ['login_compte'])){echo $color_champ['login_compte'];} ?>" placeholder="Login [obligatoire]" type="text" name="login_compte" value="<?php if(isset($_POST['login_compte'])){echo $_POST['login_compte'];} ?>">
+
+    <label for="pass">Password</label>
+    <input id="pass" class="<?php if(isset($color_champ['pass_compte'])){echo $color_champ['pass_compte'];} ?>" placeholder="Password [obligatoire]" type="text" onfocus="this.type='password';" name="pass_compte" value="<?php if(isset($_POST['pass_compte'])){echo $_POST['pass_compte'];} ?>">
+
+    <label for="image">Avatar (facultatif)</label>  
+    <input id="image" type="file" name="img_compte" value="">
+    <?php if(isset($miniature)){echo $miniature;} ?>
+    <input type="submit" name="submit" value="ENREGISTRER">
+</form>

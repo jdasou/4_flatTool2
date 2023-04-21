@@ -1,0 +1,28 @@
+<form id="form_back" enctype="multipart/form-data" action="back.php?action=page&cas=<?php if(isset($action_form)){echo $action_form;} ?>" method="post">
+    
+    <label for="id_rubrique">Rubrique associée (obligatoire)</label>   
+    <select id="id_rubrique" name="id_rubrique" class="<?php if(isset($color_champ['id_rubrique'])){echo $color_champ['id_rubrique'];} ?>" >
+        <?php if(isset($list_rubriques)){echo $list_rubriques;} ?>
+    </select>
+
+    <label for="titre_page">Titre de la page (obligatoire)</label>
+    <input id="titre_page" class="<?php if(isset($color_champ['titre_page'])){echo $color_champ['titre_page'];} ?>" placeholder="Titre [obligatoire]" type="text" name="titre_page" value="<?php if(isset($_POST['titre_page'])){echo $_POST['titre_page'];} ?>">
+        
+    <label for="contenu">Contenu de la page (obligatoire)</label>
+    
+    <div class="YSeditor">
+        <textarea id="contenu" placeholder="Contenu [obligatoire]" name="contenu_page"><?php if(isset($_POST['contenu_page'])){echo $_POST['contenu_page'];} ?></textarea>
+    </div>
+    
+    <label for="image">Illustration de la page (facultatif)</label>  
+    <input id="image" type="file" name="img_page" value="">
+    <?php if(isset($miniature)){echo $miniature;} ?>
+    <label>Visible</label>
+    <div class="options">
+        <label for="oui">OUI</label>
+        <input id="oui" type="radio" name="visible" value="1" <?php if(isset($check[1])){echo $check[1];} ?> >
+        <label for="non">NON</label>
+        <input id="non" type="radio" name="visible" value="0" <?php if(isset($check[0])){echo $check[0];} ?> >
+    </div>
+    <input type="submit" name="submit" value="ENREGISTRER">
+</form>

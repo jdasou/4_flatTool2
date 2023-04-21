@@ -1,0 +1,39 @@
+.sss{
+	width:100%;
+	position: relative;
+	display: block;	
+}
+
+.ssslide{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display:none;
+}
+
+.sssnext, .sssprev{
+	width:66px;
+	height: 100%;
+	margin: 0;
+	position: absolute;
+	z-index:10;
+	top: 0;
+	background:url('../images/bg_direction_nav.png') no-repeat;
+}
+
+.sssprev {
+	left: -12%;
+	background-position: 0 35%;
+}
+
+.sssnext {
+	right: -12%;
+	background-position: -64px 35%;
+}
+
+.sssprev:hover,.sssnext:hover{
+	cursor: pointer;
+}

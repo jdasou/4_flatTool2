@@ -1,0 +1,9 @@
+/*responsive*/
+/*point de rupture : 1280px (ecran desktop)*/
+/*point de rupture : 1024px (tablette paysage)*/
+/*point de rupture : 768px (tablette portrait + smartphone paysage)*/
+/*point de rupture : 480px (smartphone portrait)*/
+@media screen and (max-width:480px){
+
+
+}

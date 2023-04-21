@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+<head>
+<title>Tableau de bord</title>
+<!--charset=utf-8 permet de gérer les caractères accuentués-->
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="../css/root.css" rel="stylesheet" type="text/css" />
+<link href="../css/back.css" rel="stylesheet" type="text/css" />
+<link href="../css/editor.css" rel="stylesheet" type="text/css" />
+<link href="../css/responsive.css" rel="stylesheet" type="text/css" />
+<link href="../css/dashicons.min.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&display=swap" rel="stylesheet">
+<!--permet de detecter la résolution du client-->
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/admin.js"></script>
+</head>
+<body>
+    <section id="gauche">
+        <nav>
+            <menu>
+                <li>
+                    <a href="../front/front.php">Retour front</a>
+                </li>
+                <li>
+                    <a href="back.php">Dashboard</a>
+                </li>
+                <li>
+                    <a href="back.php?action=messagerie">Gestion de la messagerie</a>
+                </li>
+                <li>
+                    <a href="back.php?action=compte">Gestion des comptes</a>
+                </li> 
+                <li>
+                    <a href="back.php?action=rubrique">Gestion des rubriques</a>
+                </li>  
+                <li>
+                    <a href="back.php?action=page">Gestion des pages</a>
+                </li>                            
+            </menu>
+        </nav>
+    </section>
+    <section id="titre">
+        <h1><?php if(isset($titre)){echo $titre;} ?></h1>
+        <div id="logout"><a href="back.php?action=logout"><span class="dashicons dashicons-admin-plugins"></span></a></div>
+    </section>
+    <section id="droite">
+        <div class="confirmation">
+            <?php if(isset($confirmation)){echo $confirmation;} ?>
+        </div>
+        <?php if(isset($content)){echo $content;} ?>
+        <?php if(isset($form)){include($form);} ?>
+    </section>
+</body>
+</html>

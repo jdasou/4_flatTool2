@@ -1,0 +1,27 @@
+<form id="form_back" enctype="multipart/form-data" action="back.php?action=rubrique&cas=<?php if(isset($action_form)){echo $action_form;} ?>" method="post">
+    <label for="nom_rubrique">Nom de la rubrique (obligatoire)</label>
+    <input id="nom_rubrique" class="<?php if(isset($color_champ['nom_rubrique'])){echo $color_champ['nom_rubrique'];} ?>" placeholder="Nom de la rubrique [obligatoire]" type="text" name="nom_rubrique" value="<?php if(isset($_POST['nom_rubrique'])){echo $_POST['nom_rubrique'];} ?>">
+        
+    <label for="titre_rubrique">Titre de la rubrique (obligatoire)</label>
+    <input id="titre_rubrique" class="<?php if(isset($color_champ['titre_rubrique'])){echo $color_champ['titre_rubrique'];} ?>" placeholder="Titre de la rubrique [obligatoire]" type="text" name="titre_rubrique" value="<?php if(isset($_POST['titre_rubrique'])){echo $_POST['titre_rubrique'];} ?>">
+
+    <label for="lien_rubrique">Lien de la rubrique (facultatif)</label>
+    <input id="lien_rubrique" class="<?php if(isset($color_champ['lien_rubrique'])){echo $color_champ['lien_rubrique'];} ?>" placeholder="Lien de la rubrique [facultatif]" type="text" name="lien_rubrique" value="<?php if(isset($_POST['lien_rubrique'])){echo $_POST['lien_rubrique'];} ?>">
+      
+    
+    <label>Visible</label>
+    <div class="options">
+        <label for="oui">OUI</label>
+        <input id="oui" type="radio" name="visible" value="1" <?php if(isset($check1[1])){echo $check1[1];} ?> >
+        <label for="non">NON</label>
+        <input id="non" type="radio" name="visible" value="0" <?php if(isset($check1[0])){echo $check1[0];} ?> >
+    </div>
+    <label>Slider</label>
+    <div class="options">
+        <label for="oui">OUI</label>
+        <input id="oui" type="radio" name="slider" value="1" <?php if(isset($check2[1])){echo $check2[1];} ?> >
+        <label for="non">NON</label>
+        <input id="non" type="radio" name="slider" value="0" <?php if(isset($check2[0])){echo $check2[0];} ?> >
+    </div>
+    <input type="submit" name="submit" value="ENREGISTRER">
+</form>
