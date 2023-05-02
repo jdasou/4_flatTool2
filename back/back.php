@@ -57,6 +57,11 @@ if(isset($_SESSION['id_compte']))
             include("page.php");
         
             break;
+            case "slider":
+
+            include("slider.php");
+
+            break;
             }     
         }
 

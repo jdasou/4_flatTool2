@@ -17,13 +17,49 @@ $contact="form_contact.php";
 //on établit une connexion avec la BDD
 $connexion=connexion();
 
-//on calcule le menu_haut que poyr les pages visibles
-$requete="SELECT * FROM pages WHERE visible='1' ORDER BY id_page";
+//on calcule le menu_haut pour les pages visibles
+
+$requete="SELECT * FROM  rubriques 
+        ORDER BY rang ";
+
+
 $resultat=mysqli_query($connexion,$requete);
 $menu_haut="<nav id=\"menu_haut\">\n<menu class=\"flex\">\n";
 while($ligne=mysqli_fetch_object($resultat))
     {
-    $menu_haut.="<li><a class=\"color3\" href=\"front.php?action=page&id_page=" . $ligne->id_page . "\">" . strtoupper($ligne->titre_page) . "</a></li>";
+        //pour chaque rubrique on selectionne les pages
+    $requete2="SELECT * FROM pages WHERE id_rubrique='". $ligne->id_rubrique."'";
+    $resultat2=mysqli_query($connexion,$requete2);
+    //compte le nombres de ligne contenue dans $resultat2
+    $nb=mysqli_num_rows($resultat2);
+    //si le nombre de ligne est egal a 0 (pas de page associer a la rubrique )
+    if ($nb==0){
+        $menu_haut.="<li><a class=\"color3\" href=\"#\">" . strtoupper($ligne->nom_rubrique) . "</a></li>";
+
+    }
+        //si le nombre de ligne est egal a 1 (une page associer a la rubrique )
+    if ($nb==1){
+        $ligne2=mysqli_fetch_object($resultat2);
+        $menu_haut.="<li><a class=\"color3\" href=\"front.php?action=page&id_page=" . $ligne2->id_page . "\">" . strtoupper($ligne->nom_rubrique) . "</a></li>";
+
+    }
+    //si plusieur page associer a la rubrique
+    if ($nb>1){
+        $menu_haut.="<li><label for=\"rub-".$ligne->id_rubrique."\">".strtoupper($ligne->nom_rubrique)."</label>";
+        $menu_haut.="<input id=\"rub-".$ligne->id_rubrique."\" value=\"\" type=\"checkbox\" name=\"rub-".$ligne->id_rubrique."\" />";
+        $menu_haut.="<ul>";
+        while($ligne2=mysqli_fetch_object($resultat2))
+        {
+            $menu_haut.="<li><a href=\"front.php?action=page&id_page=" . $ligne2->id_page . "\">".$ligne2->titre_page."</a></li>";
+
+        }
+        $menu_haut.="</ul>";
+        //fermeture du <li> de la rubrique
+        $menu_haut.="</li>";
+
+
+    }
+
     }
 $menu_haut.="</menu>\n</nav>\n";
 
