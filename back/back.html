@@ -19,34 +19,16 @@
 </head>
 <body>
     <section id="gauche">
-        <nav>
-            <menu>
-                <li>
-                    <a href="../front/front.php">Retour front</a>
-                </li>
-                <li>
-                    <a href="back.php">Dashboard</a>
-                </li>
-                <li>
-                    <a href="back.php?action=messagerie">Gestion de la messagerie</a>
-                </li>
-                <li>
-                    <a href="back.php?action=compte">Gestion des comptes</a>
-                </li> 
-                <li>
-                    <a href="back.php?action=rubrique">Gestion des rubriques</a>
-                </li>  
-                <li>
-                    <a href="back.php?action=page">Gestion des pages</a>
-                </li>
-                <li>
-                    <a href="back.php?action=slider">Gestion du slider</a>
-                </li>
-            </menu>
-        </nav>
+        <?php if(isset($_SESSION['statut_compte'])){include($_SESSION['statut_compte'] . ".html");} ?>
     </section>
     <section id="titre">
         <h1><?php if(isset($titre)){echo $titre;} ?></h1>
+        <?php
+        if(isset($_SESSION['statut_compte']) && $_SESSION['statut_compte']=="super_admin")
+            {
+            echo "<div id=\"settings\"><a href=\"back.php?action=reset\"><span class=\"dashicons dashicons-admin-generic\"></span></a></div>";    
+            }
+        ?>
         <div id="logout"><a href="back.php?action=logout"><span class="dashicons dashicons-admin-plugins"></span></a></div>
     </section>
     <section id="droite">

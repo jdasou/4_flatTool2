@@ -76,10 +76,17 @@ html{
     z-index:auto;
 } 
 
-#logout a{
+#logout a,#settings a{
     font-size:2rem;
     color:#000;
     text-decoration:none;
+}
+
+#settings{
+    position:absolute;
+    right:80px;
+    top:20px;
+    z-index:auto;
 }
 
 #droite{
@@ -206,4 +213,29 @@ html{
 .all{
     padding:8px;
     border-top:1px dotted #c3c3c3;
+}
+#reset{
+    padding:50px 10%;
+}
+
+#reset menu{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    list-style-type:none;
+}
+
+#reset li{
+    width:49%;
+    margin:10px 0;
+}
+
+#reset a{
+    display:block;
+    padding:30px;
+    text-align:center;
+    background-color:#d2d2d2;
+    border-radius:4px;
+    color:#000;
+    text-decoration:none;
 }

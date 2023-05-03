@@ -6,7 +6,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link href="../css/root.css" rel="stylesheet" type="text/css" />
 <link href="../css/front.css" rel="stylesheet" type="text/css" />
-<link href="../css/sss.css" rel="stylesheet" type="text/css" />
+<?php if(isset($slide)){echo "<link href=\"../css/sss.css\" rel=\"stylesheet\" type=\"text/css\" />";} ?>
 <link href="../css/responsive.css" rel="stylesheet" type="text/css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 <body>
   <header id="header" class="flex w1 bgcolor4">
     <?php if(isset($retour)){echo $retour;} ?>
-    <a><img id="logo" src="../images/logo.png" alt="Flattool - Landing page" /></a>
+    <a href="front.php"><img id="logo" src="../images/logo.png" alt="Flattool - Landing page" /></a>
     <div class="flex">
 
       <?php if(isset($menu_haut)){echo $menu_haut;} ?>
@@ -34,7 +34,7 @@
     </div>
   </header>
   <main>
-    <?php if(isset($slide)){include($slide);} ?>  
+    <?php if(isset($slide)){echo $slide;} ?>  
     <?php if(isset($content)){echo $content;} ?>
 
     <section id="blog" class="flex pad">

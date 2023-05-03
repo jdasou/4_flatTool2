@@ -1,7 +1,6 @@
  <?php
 //permet d'autoriser l'usage des variables de session
 session_start();
-$slide="home.php";
 
 //si on est connecté au back
 //on place un bouton sur le front pour revenir vers le TB
@@ -18,48 +17,43 @@ $contact="form_contact.php";
 $connexion=connexion();
 
 //on calcule le menu_haut pour les pages visibles
-
-$requete="SELECT * FROM  rubriques 
-        ORDER BY rang ";
-
-
+$requete="SELECT * FROM rubriques ORDER BY rang";
 $resultat=mysqli_query($connexion,$requete);
 $menu_haut="<nav id=\"menu_haut\">\n<menu class=\"flex\">\n";
 while($ligne=mysqli_fetch_object($resultat))
     {
-        //pour chaque rubrique on selectionne les pages
-    $requete2="SELECT * FROM pages WHERE id_rubrique='". $ligne->id_rubrique."'";
+    // pour chaque rubrique on sélectionne les pages
+    $requete2="SELECT * FROM pages WHERE id_rubrique='" . $ligne->id_rubrique . "'";
     $resultat2=mysqli_query($connexion,$requete2);
-    //compte le nombres de ligne contenue dans $resultat2
+    //compte le nombre de lignes contenues dans $resultat2
     $nb=mysqli_num_rows($resultat2);
-    //si le nombre de ligne est egal a 0 (pas de page associer a la rubrique )
-    if ($nb==0){
-        $menu_haut.="<li><a class=\"color3\" href=\"#\">" . strtoupper($ligne->nom_rubrique) . "</a></li>";
-
-    }
-        //si le nombre de ligne est egal a 1 (une page associer a la rubrique )
-    if ($nb==1){
+    //si aucune ligne (pas de page associée à la rubrique)
+    if($nb==0)
+        {
+        $menu_haut.="<li><a class=\"color3\" href=\"#\">" . strtoupper($ligne->nom_rubrique) . "</a></li>";  
+        }
+    // si une seule page est associée à la rubrique
+    if($nb==1)
+        {
         $ligne2=mysqli_fetch_object($resultat2);
         $menu_haut.="<li><a class=\"color3\" href=\"front.php?action=page&id_page=" . $ligne2->id_page . "\">" . strtoupper($ligne->nom_rubrique) . "</a></li>";
-
-    }
-    //si plusieur page associer a la rubrique
-    if ($nb>1){
-        $menu_haut.="<li><label for=\"rub-".$ligne->id_rubrique."\">".strtoupper($ligne->nom_rubrique)."</label>";
-        $menu_haut.="<input id=\"rub-".$ligne->id_rubrique."\" value=\"\" type=\"checkbox\" name=\"rub-".$ligne->id_rubrique."\" />";
+        }
+    // si plusieurs pages sont associées à la rubrique
+    if($nb>1)
+        {
+        $menu_haut.="<li><label for=\"rub-" . $ligne->id_rubrique . "\">" . strtoupper($ligne->nom_rubrique) . "</label>";
+        $menu_haut.="<input id=\"rub-" . $ligne->id_rubrique . "\" name=\"rub-" . $ligne->id_rubrique . "\" type=\"checkbox\" value=\"\" />";
+        //on calcule le sous-menu
         $menu_haut.="<ul>";
         while($ligne2=mysqli_fetch_object($resultat2))
-        {
-            $menu_haut.="<li><a href=\"front.php?action=page&id_page=" . $ligne2->id_page . "\">".$ligne2->titre_page."</a></li>";
-
-        }
+            {
+            $menu_haut.="<li><a href=\"front.php?action=page&id_page=" . $ligne2->id_page . "\">" . $ligne2->titre_page . "</a></li>";   
+            }
         $menu_haut.="</ul>";
+
         //fermeture du <li> de la rubrique
         $menu_haut.="</li>";
-
-
-    }
-
+        }
     }
 $menu_haut.="</menu>\n</nav>\n";
 
@@ -106,11 +100,17 @@ if(isset($_GET['action']))
         //si on reçoit le parametre "id_page" via la méthode GET (lien url)
         if(isset($_GET['id_page']))
             {
-            unset($slide);
-            $requete="SELECT * FROM pages WHERE id_page='" . $_GET['id_page'] . "'";
+            $requete="SELECT r.*, p.* FROM rubriques AS r 
+                    INNER JOIN pages AS p 
+                    ON r.id_rubrique=p.id_rubrique 
+                    WHERE p.id_page='" . $_GET['id_page'] . "'";
             $resultat=mysqli_query($connexion, $requete);
             $ligne=mysqli_fetch_object($resultat);
-
+            //si le slider est autorisé pour cette rubrique
+            if($ligne->slider==1)
+                {
+                $slide=slide();   
+                }
             $content="<section id=\"page\" class=\"page-".$ligne->id_page." flex pad\">";
             $content.="<h1 class=\"center\">" . $ligne->titre_page . "</h1>";
             if(!empty($ligne->img_page))
@@ -123,7 +123,10 @@ if(isset($_GET['action']))
         break;
         }     
     }
-
+else{
+    //si arrivée sur page d'accueil on affiche le slider
+    $slide=slide();
+    }
 //permet de relier front.php avec front.html
 include("front.html");
 

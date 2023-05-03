@@ -1,0 +1,10 @@
+<form id="form_back" enctype="multipart/form-data" action="back.php?action=css&cas=<?php if(isset($action_form)){echo $action_form;} ?>" method="post">
+    
+    <label for="titre_css">Titre de la feuille de style (obligatoire)</label>
+    <input id="titre_css" class="<?php if(isset($color_champ['titre_css'])){echo $color_champ['titre_css'];} ?>" placeholder="Titre [obligatoire]" type="text" name="titre_css" value="<?php if(isset($_POST['titre_css'])){echo $_POST['titre_css'];} ?>">
+    
+    <label for="fichier">Fichier css (obligatoire)</label>  
+    <input id="fichier" class="<?php if(isset($color_champ['fichier_css'])){echo $color_champ['fichier_css'];} ?>" type="file" name="fichier_css" value="">
+    
+    <input type="submit" name="submit" value="ENREGISTRER">
+</form>

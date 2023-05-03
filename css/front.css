@@ -171,6 +171,29 @@ input[type="submit"]:hover{
 }
 
 /*********************/
+#menu_haut input{
+	display:none;
+}
+
+#menu_haut li{
+	position:relative;
+}
+
+#menu_haut li > ul{
+	display:none;
+	position:absolute;
+	top:50px;
+	left:0;
+	padding:10px;
+	width:50vw;
+	z-index:2;
+}
+
+#menu_haut input:checked + ul{
+	display:block;
+}
+
+/*********************/
 #page{
 	padding:var(--padding_v) var(--padding_h);	
 }

@@ -142,4 +142,49 @@ function login($login,$pass){
   mysqli_close($connexion);
 }
 
+//===============================================
+function slide(){
+  $connexion=connexion();
+  $requete="SELECT * FROM slider WHERE visible='1' ORDER BY rang";
+  $resultat=mysqli_query($connexion,$requete);
+  $slide="<section id=\"slider\" class=\"bgcolor1 flex pad\">";
+  while($ligne=mysqli_fetch_object($resultat))
+    {
+    $slide.="<div>";
+    $slide.="<div class=\"slide\">"; 
+    $slide.="<img class=\"w2\" src=\"" . str_replace("_s","_b",$ligne->img_slider) . "\" alt=\"" . $ligne->alt_slider . "\" />";
+    $slide.="<article class=\"w2\">";
+    $slide.="<h1 class=\"color4\">" . $ligne->titre_slider . "</h1>";
+    if(!empty($ligne->contenu_slider))
+      {
+      $slide.="<p>" . $ligne->contenu_slider . "</p>"; 
+      }
+    $slide.="</article>";
+    $slide.="</div>";
+    $slide.="</div>"; 
+    }
+  $slide.="</section>";
+
+  $slide.="<section id=\"home\" class=\"flex\"><h1 class=\"center\">HOME <span class=\"color2\">FLATTOOL</span></h1></section>";
+
+  mysqli_close($connexion);
+  return $slide;
+}
+
+//======================================
+function nettoyer_images($debut_nom)
+  {
+  //on scanne le répertoire des images
+  $scandir = scandir("../medias");
+  //Lister les fichiers du dossier medias
+  foreach($scandir as $fichier)
+      {
+      if(preg_match($debut_nom,$fichier))
+          {
+          //echo $fichier . "<br>";    
+          unlink("../medias/" . $fichier);
+          }
+      }
+  }
+
 ?>
